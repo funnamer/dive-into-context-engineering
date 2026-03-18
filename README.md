@@ -47,7 +47,7 @@
 运行示例：
 ![图片描述](./docs/public/run_eg.png)
 完整日志：
-[主程序](./code/miniMaster/log.txt)
+[日志](./code/miniMaster/log.txt)
 
 ## 贡献者名单
 

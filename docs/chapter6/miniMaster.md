@@ -2,16 +2,33 @@
 
 ## 6.1 项目概述
 
-miniMaster 是一个最小化的 Claude Code Skills 实现，展示了如何构建一个基于技能（Skills）系统的 AI Agent 框架。通过这个项目，你将理解上下文工程的核心实践：**动态调度**和**按需加载**。
-
-### 核心特性
-
-- ✅ **技能系统**：支持模块化技能（PDF、DOCX、PPTX、XLSX 处理）
-- ✅ **工具扩展**：Read、Bash、Write 三个基础工具
-- ✅ **安全沙箱**：文件系统访问限制、命令超时保护
-- ✅ **透明执行**：完整的思考过程和工具调用日志
-- ✅ **容错机制**：API 请求自动重试、异常捕获
-
+miniMaster 是一个最小化的 Claude Code Skills 实现，展示了如何构建一个基于技能（Skills）系统的 AI Agent 框架。通过这个项目，可以理解上下文工程的核心实践：**动态调度**和**按需加载**。
+```mermaid
+graph TB
+    User[用户输入] --> CLI[cli.py 命令行接口]
+    CLI --> App[app.py 应用构建]
+    
+    App --> Config[配置管理]
+    App --> Skills[技能系统]
+    App --> Tools[工具系统]
+    App --> Agent[Agent 循环]
+    
+    Skills --> Discovery[技能发现]
+    Skills --> Registry[技能注册表]
+    Skills --> Parser[技能解析器]
+    
+    Tools --> Bash[Bash 工具]
+    Tools --> Read[Read 工具]
+    
+    Agent --> Model[模型客户端]
+    Agent --> Loop[执行循环]
+    
+    Bash --> Runner[子进程运行器]
+    Read --> FS[文件系统]
+    
+    Runner --> OS[操作系统命令]
+    FS --> Files[项目文件]
+```
 ### 项目结构
 
 ```
@@ -114,8 +131,6 @@ class AppConfig:
         return out
 ```
 
-**代码解释**：
-
 1. **使用 `dataclass`**：简化配置类的定义，自动生成构造函数
 2. **环境变量优先级**：支持通过环境变量覆盖默认值
 3. **路径安全处理**：
@@ -198,8 +213,6 @@ class Filesystem:
         }
 ```
 
-**关键点**：
-
 - **白名单机制**：只允许访问特定目录下的文件
 - **防止路径遍历攻击**：通过 `resolve()` 规范化路径
 - **大文件保护**：限制最大读取大小，防止内存溢出
@@ -268,8 +281,6 @@ class SubprocessRunner:
                 "timed_out": True,
             }
 ```
-
-**安全特性**：
 
 1. **环境变量隔离**：只传递必要的环境变量
 2. **超时保护**：防止无限循环或长时间运行的命令
@@ -658,7 +669,7 @@ def render_skill_catalog(registry: SkillRegistry) -> str:
 ```
 
 **为什么使用 XML？**
-
+- claude官方推荐的格式
 - 结构清晰，易于 LLM 解析
 - 可以嵌套复杂信息
 - 与 Markdown 正文区分明显
@@ -711,7 +722,7 @@ def build_system_prompt(registry: SkillRegistry, tools_text: str) -> str:
     return "\n\n".join(parts)
 ```
 
-**System Prompt 设计哲学**：
+**System Prompt 设计**：
 
 1. **明确输出格式**：强制 JSON，避免解析歧义
 2. **强制思考**：要求先输出 `thought` 字段，提高可解释性
@@ -1309,6 +1320,3 @@ tools = {
 - 开发 Web UI 界面
 - 增加记忆系统
 - 引入subagent
-
-
-通过动手实践这个项目，你将深入理解现代 Agent 系统的设计原理和实现细节。
