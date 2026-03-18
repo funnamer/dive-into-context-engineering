@@ -4,7 +4,7 @@
 
 miniMaster 是一个最小化的 Claude Code Skills 实现，展示了如何构建一个基于技能（Skills）系统的 AI Agent 框架。通过这个项目，可以理解上下文工程的核心实践：**动态调度**和**按需加载**。
 
-![miniMaster 项目结构](structure.png)
+![miniMaster 项目结构](/structure.png)
 
 ### 项目结构
 
